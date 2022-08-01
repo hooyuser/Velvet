@@ -38,14 +38,13 @@ namespace Velvet
 		void ProcessScroll(GLFWwindow* m_window, double xoffset, double yoffset);
 		void ProcessKeyboard(GLFWwindow* m_window);
 
-		template <typename T>
-		enable_if_t<is_base_of<Component, T>::value, vector<T*>> FindComponents()
+		template <std::derived_from<Component> T>
+		vector<T*> FindComponents()
 		{
 			vector<T*> result;
-			for (auto actor : m_actors)
+			for (auto& actor : m_actors)
 			{
-				auto component = actor->GetComponents<T>();
-				if (component.size() > 0)
+				if (auto const component = actor->GetComponents<T>(); component.size() > 0)
 				{
 					result.insert(result.end(), component.begin(), component.end());
 				}

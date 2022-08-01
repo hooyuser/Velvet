@@ -36,11 +36,11 @@ namespace Velvet
 
 		void AddComponents(const initializer_list<shared_ptr<Component>>& newComponents);
 
-		template <typename T>
-		enable_if_t<is_base_of<Component, T>::value, T*> GetComponent()
+		template <std::derived_from<Component> T>
+		T* GetComponent()
 		{
 			T* result = nullptr;
-			for (auto c : components)
+			for (auto& c : components)
 			{
 				result = dynamic_cast<T*>(c.get());
 				if (result)
@@ -49,14 +49,13 @@ namespace Velvet
 			return result;
 		}
 
-		template <typename T>
-		enable_if_t<is_base_of<Component, T>::value, vector<T*>> GetComponents()
+		template <std::derived_from<Component> T>
+		vector<T*> GetComponents()
 		{
 			vector<T*> result;
-			for (auto c : components)
+			for (auto& c : components)
 			{
-				auto item = dynamic_cast<T*>(c.get());
-				if (item)
+				if (auto item = dynamic_cast<T*>(c.get()))
 				{
 					result.push_back(item);
 				}

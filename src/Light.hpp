@@ -3,6 +3,7 @@
 #include "Component.hpp"
 #include "Global.hpp"
 #include "GameInstance.hpp"
+#include <ranges>
 
 namespace Velvet
 {
@@ -26,7 +27,7 @@ namespace Velvet
 		~Light()
 		{
 			auto& lights = Global::lights;
-			auto position = std::find(lights.begin(), lights.end(), this);
+			auto position = ranges::find(lights, this);
 			if (position != lights.end())
 			{
 				lights.erase(position);

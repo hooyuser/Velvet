@@ -132,17 +132,22 @@ public:
 		SpawnCameraAndLight(game);
 		SpawnInfinitePlane(game);
 
-		auto sphere = SpawnSphere(game);
-		float radius = 0.5f;
+		auto const sphere = SpawnSphere(game);
+		constexpr float radius = 0.5f;
 		sphere->Initialize(glm::vec3(0, radius, 0), glm::vec3(radius));
 
-		int clothResolution = 40;
-		auto cloth = SpawnCloth(game, clothResolution);
+		constexpr int clothResolution = 40;
+		auto const cloth = SpawnCloth(game, clothResolution);
 		cloth->Initialize(glm::vec3(0.0f, 1.5f, 1.0f), glm::vec3(1.0), glm::vec3(90, 0, 0));
 
-		auto clothObj = cloth->GetComponent<VtClothObjectGPU>();
-		if (clothObj) clothObj->SetAttachedIndices({ 0, clothResolution, (clothResolution + 1) * (clothResolution + 1) - 1, (clothResolution + 1) * (clothResolution) });
-
+		if (auto const clothObj = cloth->GetComponent<VtClothObjectGPU>()) {
+			clothObj->SetAttachedIndices({
+					0,
+					clothResolution,
+					(clothResolution + 1) * (clothResolution + 1) - 1,
+					(clothResolution + 1) * (clothResolution)
+				});
+		}
 	}
 };
 
